@@ -1,17 +1,14 @@
 name: Regression Suite
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * *'   # Runs daily ~11:30 PM IST
 
 jobs:
   regression:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -24,10 +21,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run regression tests & generate Allure report
-        run: npm run regression:allure
+      - name: Install Playwright Browsers
+        run: npx playwright install --with-deps
+
+      - name: Install Allure
+        run: npm install -g allure-commandline --save-dev
+
+      - name: Run Regression Tests
+        run: npm run regression
+
+      - name: Generate Allure Report
+        if: always()
+        run: allure generate ./allure-results --clean -o ./allure-report
 
       - name: Upload Allure HTML report artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: regression-allure-report
