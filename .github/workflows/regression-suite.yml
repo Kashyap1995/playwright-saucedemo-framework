@@ -28,7 +28,7 @@ jobs:
         run: npm install -g allure-commandline --save-dev
 
       - name: Run Regression Tests
-        run: npm run regression
+        run: npm run regression:ci
 
       - name: Generate Allure Report
         if: always()
