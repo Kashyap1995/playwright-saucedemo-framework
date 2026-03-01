@@ -28,7 +28,7 @@ jobs:
         run: npm run smoke:allure
 
       - name: Upload Allure HTML report artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: smoke-allure-report
           path: allure-report
