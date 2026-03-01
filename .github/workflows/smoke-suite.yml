@@ -6,6 +6,9 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write   # ✅ IMPORTANT (Fixes 403 error)
+
 jobs:
   smoke:
     runs-on: ubuntu-latest
@@ -37,3 +40,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./allure-report
+          publish_branch: gh-pages   # ✅ explicitly define
