@@ -42,17 +42,16 @@ jobs:
         if: always()
         run: allure generate ./allure-results --clean -o ./allure-report
 
+      # Prepare report for deployment
+      - run: mkdir regression && mv allure-report regression/
+
       - name: Upload Allure HTML report artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: regression-allure-report
-          path: allure-report
+          path: regression
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-report
-          destination_dir: regression
+        uses: actions/deploy-pages@v4

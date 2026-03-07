@@ -29,16 +29,15 @@ jobs:
       - run: npm install -g allure-commandline --save-dev
       - run: npm run smoke:ci
 
+      # Prepare report for deployment
+      - run: mkdir smoke && mv allure-report smoke/
+
       # Upload report as artifact
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./allure-report
+          path: smoke
 
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: allure-report
-          destination_dir: smoke
+        uses: actions/deploy-pages@v4
