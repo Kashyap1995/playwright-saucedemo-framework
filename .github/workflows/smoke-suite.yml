@@ -29,19 +29,11 @@ jobs:
       - run: npm install -g allure-commandline --save-dev
       - run: npm run smoke:ci
 
-      # Prepare report for deployment
-      - run: mkdir smoke && mv allure-report smoke/
-      - run: |
-          cat > index.html << 'EOF'
-          <html><body><h1>Allure Smoke Report</h1><a href="smoke/">View Report</a></body></html>
-          EOF
-      - run: mkdir deploy && mv smoke deploy/ && mv index.html deploy/      
-      - run: ls -la deploy/
-      # Upload report artifact
+      # Upload report as artifact for GitHub Pages
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: deploy
+          path: allure-report
 
       - name: Deploy to GitHub Pages
         id: deployment
