@@ -29,11 +29,22 @@ jobs:
       - run: npm install -g allure-commandline --save-dev
       - run: npm run smoke:ci
 
+      # Prepare and deploy to smoke subfolder
+      - run: mkdir -p deploy/smoke && cp -r allure-report/* deploy/smoke/
+      - run: |
+          cat > deploy/index.html << 'EOF'
+          <html><body style="font-family: Arial; text-align: center; padding: 50px;">
+          <h1>Test Reports</h1>
+          <p><a href="smoke/" style="font-size: 20px; padding: 10px;">📊 Latest Smoke Report</a></p>
+          <p><a href="regression/" style="font-size: 20px; padding: 10px;">📊 Latest Regression Report</a></p>
+          </body></html>
+          EOF
+
       # Upload report as artifact for GitHub Pages
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: allure-report
+          path: deploy
 
       - name: Deploy to GitHub Pages
         id: deployment
