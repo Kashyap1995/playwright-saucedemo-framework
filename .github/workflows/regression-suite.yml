@@ -44,7 +44,10 @@ jobs:
 
       # Prepare report for deployment
       - run: mkdir regression && mv allure-report regression/
-      - run: echo '<html><body><h1>Allure Regression Report</h1><a href="regression/">View Report</a></body></html>' > index.html
+      - run: |
+          cat > index.html << 'EOF'
+          <html><body><h1>Allure Regression Report</h1><a href="regression/">View Report</a></body></html>
+          EOF
       - run: mkdir temp && mv regression temp/ && mv index.html temp/
 
       - name: Upload Allure HTML report artifact
