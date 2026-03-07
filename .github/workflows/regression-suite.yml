@@ -49,6 +49,7 @@ jobs:
           <html><body><h1>Allure Regression Report</h1><a href="regression/">View Report</a></body></html>
           EOF
       - run: mkdir temp && mv regression temp/ && mv index.html temp/
+      - run: ls -la temp/
 
       - name: Upload Allure HTML report artifact
         if: always()

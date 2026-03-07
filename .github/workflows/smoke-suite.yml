@@ -35,8 +35,7 @@ jobs:
           cat > index.html << 'EOF'
           <html><body><h1>Allure Smoke Report</h1><a href="smoke/">View Report</a></body></html>
           EOF
-      - run: mkdir temp && mv smoke temp/ && mv index.html temp/
-
+      - run: mkdir temp && mv smoke temp/ && mv index.html temp/      - run: ls -la temp/
       # Upload report artifact
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
