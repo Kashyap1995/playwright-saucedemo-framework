@@ -48,15 +48,15 @@ jobs:
           cat > index.html << 'EOF'
           <html><body><h1>Allure Regression Report</h1><a href="regression/">View Report</a></body></html>
           EOF
-      - run: mkdir temp && mv regression temp/ && mv index.html temp/
-      - run: ls -la temp/
+      - run: mkdir deploy && mv regression deploy/ && mv index.html deploy/
+      - run: ls -la deploy/
 
       - name: Upload Allure HTML report artifact
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: regression-allure-report
-          path: temp
+          path: deploy
 
       - name: Deploy to GitHub Pages
         id: deployment

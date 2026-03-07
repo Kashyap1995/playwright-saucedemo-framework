@@ -35,12 +35,13 @@ jobs:
           cat > index.html << 'EOF'
           <html><body><h1>Allure Smoke Report</h1><a href="smoke/">View Report</a></body></html>
           EOF
-      - run: mkdir temp && mv smoke temp/ && mv index.html temp/      - run: ls -la temp/
+      - run: mkdir deploy && mv smoke deploy/ && mv index.html deploy/      
+      - run: ls -la deploy/
       # Upload report artifact
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: temp
+          path: deploy
 
       - name: Deploy to GitHub Pages
         id: deployment
