@@ -37,7 +37,7 @@ jobs:
           EOF
       - run: mkdir temp && mv smoke temp/ && mv index.html temp/
 
-      # Upload report as artifact
+      # Upload report artifact
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
