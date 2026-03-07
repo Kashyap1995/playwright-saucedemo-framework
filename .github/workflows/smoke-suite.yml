@@ -31,12 +31,13 @@ jobs:
 
       # Prepare report for deployment
       - run: mkdir smoke && mv allure-report smoke/
+      - run: echo '<html><body><h1>Allure Smoke Report</h1><a href="smoke/">View Report</a></body></html>' > index.html
 
       # Upload report as artifact
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: smoke
+          path: .
 
       - name: Deploy to GitHub Pages
         id: deployment
