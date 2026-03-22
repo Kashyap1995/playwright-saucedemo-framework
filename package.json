@@ -18,8 +18,7 @@
     "smoke:ci": "npm run clean:allure && npm run smoke && npm run allure:generate",
     "regression:ci": "npm run clean:allure && npm run regression && npm run allure:generate",
     "test:cart:allure": "npm run clean:allure && npx playwright test tests/cart.spec.ts --headed && npm run allure:generate && npm run allure:open",
-    "test:addToCart:allure": "npm run clean:allure && npx playwright test tests/addToCart.spec.ts --headed && npm run allure:generate && npm run allure:open"
-  },
+"test:addToCart:allure": "rimraf allure-results allure-report && npx playwright test tests/addToCart.spec.ts --headed && allure serve allure-results"  },
   "keywords": [],
   "author": "Kashyap Dave",
   "license": "ISC",

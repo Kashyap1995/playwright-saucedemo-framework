@@ -2,10 +2,13 @@ import { test, expect } from './fixtures';
 import { ProductsPage } from '../pages/ProductsPage';
 import { products } from '../utils/testData';
 
-test('Add product to cart', async ({ loggedInPage }) => {
+
+test('Verify products and add specific product', async ({ loggedInPage }) => {
   const productsPage = new ProductsPage(loggedInPage);
 
-  await productsPage.addProduct(products.backpack);
+  await productsPage.verifyAllProducts(); // verify all products
 
-  await expect(loggedInPage.locator('.shopping_cart_badge')).toHaveText('1');
+  await productsPage.addProduct(products.backpack); // add specific product
+
+  await productsPage.verifyCartCount(1); // verify cart
 });
