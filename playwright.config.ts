@@ -13,8 +13,7 @@ export default defineConfig({
 
   reporter: [
     ['list'],
-    ['allure-playwright', { outputFolder: 'allure-results' }]
-  ],
+    ['allure-playwright']],
 
   use: {
     baseURL: process.env.BASE_URL,
