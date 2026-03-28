@@ -4,8 +4,6 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
-  schedule:
-    - cron: '0 18 * * *'   # Runs daily ~11:30 PM IST
 
 permissions:
   contents: read
@@ -28,27 +26,26 @@ jobs:
 
       - run: npm ci
       - run: npx playwright install --with-deps
-      - run: npm install -g allure-commandline --save-dev
+      - run: npm install -g allure-commandline
+
       - run: npm run regression:ci
 
-      # Prepare and deploy to regression subfolder
-      - run: mkdir -p deploy/regression && cp -r allure-report/* deploy/regression/
+      # Copy regression report
+      - run: mkdir -p deploy/regression && cp -r allure-report/regression/* deploy/regression/
+
+      # Index page
       - run: |
           cat > deploy/index.html << 'EOF'
           <html><body style="font-family: Arial; text-align: center; padding: 50px;">
           <h1>Test Reports</h1>
-          <p><a href="smoke/" style="font-size: 20px; padding: 10px;">📊 Latest Smoke Report</a></p>
-          <p><a href="regression/" style="font-size: 20px; padding: 10px;">📊 Latest Regression Report</a></p>
+          <p><a href="smoke/">📊 Smoke Report</a></p>
+          <p><a href="regression/">📊 Regression Report</a></p>
           </body></html>
           EOF
 
-      # Upload report as artifact for GitHub Pages
-      - name: Upload Pages Artifact
-        if: always()
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v3
         with:
           path: deploy
 
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
