@@ -5,16 +5,8 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 jobs:
   smoke:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
 
     steps:
@@ -28,24 +20,5 @@ jobs:
       - run: npx playwright install --with-deps
       - run: npm install -g allure-commandline
 
-      - run: npm run smoke:ci
-
-      # Copy smoke report
-      - run: mkdir -p deploy/smoke && cp -r allure-report/smoke/* deploy/smoke/
-
-      # Index page
-      - run: |
-          cat > deploy/index.html << 'EOF'
-          <html><body style="font-family: Arial; text-align: center; padding: 50px;">
-          <h1>Test Reports</h1>
-          <p><a href="smoke/">📊 Smoke Report</a></p>
-          <p><a href="regression/">📊 Regression Report</a></p>
-          </body></html>
-          EOF
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: deploy
-
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      # Only run smoke tests (NO deploy)
+      - run: npm run smoke

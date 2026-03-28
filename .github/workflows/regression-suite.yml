@@ -28,24 +28,50 @@ jobs:
       - run: npx playwright install --with-deps
       - run: npm install -g allure-commandline
 
-      - run: npm run regression:ci
+      # -------- SMOKE REPORT --------
+      - name: Run Smoke Tests
+        run: npm run smoke
 
-      # Copy regression report
-      - run: mkdir -p deploy/regression && cp -r allure-report/regression/* deploy/regression/
+      - name: Generate Smoke Report
+        run: allure generate allure-results --clean -o allure-report/smoke
 
-      # Index page
-      - run: |
+      # -------- REGRESSION REPORT --------
+      - name: Clean before regression
+        run: rimraf allure-results
+
+      - name: Run Regression Tests
+        run: npm run regression
+
+      - name: Generate Regression Report
+        run: allure generate allure-results --clean -o allure-report/regression
+
+      # -------- MERGE REPORTS --------
+      - name: Prepare deploy folder
+        run: |
+          mkdir -p deploy/smoke
+          mkdir -p deploy/regression
+          cp -r allure-report/smoke/* deploy/smoke/
+          cp -r allure-report/regression/* deploy/regression/
+
+      # -------- INDEX PAGE --------
+      - name: Create index page
+        run: |
           cat > deploy/index.html << 'EOF'
-          <html><body style="font-family: Arial; text-align: center; padding: 50px;">
+          <html>
+          <body style="font-family: Arial; text-align: center; padding: 50px;">
           <h1>Test Reports</h1>
           <p><a href="smoke/">📊 Smoke Report</a></p>
           <p><a href="regression/">📊 Regression Report</a></p>
-          </body></html>
+          </body>
+          </html>
           EOF
 
-      - uses: actions/upload-pages-artifact@v3
+      # -------- DEPLOY --------
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: deploy
 
-      - id: deployment
+      - name: Deploy to GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4
