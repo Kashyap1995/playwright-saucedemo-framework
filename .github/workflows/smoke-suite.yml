@@ -20,5 +20,5 @@ jobs:
       - run: npx playwright install --with-deps
       - run: npm install -g allure-commandline
 
-      # Only run smoke tests (NO deploy)
+      # Only run smoke tests
       - run: npm run smoke
